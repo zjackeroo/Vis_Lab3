@@ -42,4 +42,5 @@ data = d3.csv('./data/cities.csv', d3.autoType).then(data=>{
             return (d.city + ', ' + d.country)
         })
         .attr('font-size', d=>d.population>1000000?11:0)
+        .attr('text-anchor', middle)
 })
