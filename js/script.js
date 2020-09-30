@@ -48,18 +48,22 @@ buildings_data = d3.csv('./data/buildings.csv', d3.autoType).then(buildings_data
     sorted_buildings = buildings_data.sort((a,b)=>(b.height_m-a.height_m));
     console.log(sorted_buildings)
 
-    const width = 1500;
+    const width = 500;
     const height = 500;
     const svg = d3.select('.buildings-plot').append('svg').attr('width', width).attr('height', height)
     svg.selectAll('rect')
         .data(sorted_buildings)
         .enter()
         .append('rect')
-        .attr('width', d=>d.height_px)
+        .attr('width', d=>d.height_px*0.9)
         .attr('height', 30)
         .attr('x', 250)
         .attr('y', (d,i)=>10+(i*40))
         .attr('fill', 'orange')
+        .on("click", function(d,i) {
+            console.log('You clicked:', i)
+            showDetails(i)
+        });
     svg.selectAll('text.name')
         .data(sorted_buildings)
         .enter()
@@ -77,11 +81,23 @@ buildings_data = d3.csv('./data/buildings.csv', d3.autoType).then(buildings_data
         .text(d=>{
             return (d.height_ft + ' ft')
         })
-        // .attr('dx', 200)
-        .attr('x', d=>240+d.height_px)
+        .attr('x', d=>240+d.height_px*0.9)
         .attr('y', 0)
         .attr('dy', (d,i)=>30+(i*40))
         .attr('font-size', 15)
         .attr('fill', 'white')
         .attr('text-anchor', 'end')
 })
+
+function showDetails(i) {
+    console.log('Showing details...');
+    document.getElementById('image').src = `./data/${i.image}`;
+    document.getElementById('image').style.display = 'grid';
+    document.getElementById('hidden-wrap').style.display = 'grid';
+    document.getElementById('building').textContent = i.building;
+    document.getElementById('height').textContent = i.height_ft + ' ft';
+    document.getElementById('city').textContent = i.city;
+    document.getElementById('country').textContent = i.country;
+    document.getElementById('floors').textContent = i.floors;
+    document.getElementById('completed').textContent = i.completed;
+}
